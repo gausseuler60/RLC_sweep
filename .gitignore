@@ -1,0 +1,7 @@
+
+*.cache
+*.cache
+*.pdb
+*.ide
+Shell/.vs/Shell/v16/.suo
+*.lock
