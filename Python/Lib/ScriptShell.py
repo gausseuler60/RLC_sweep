@@ -27,14 +27,14 @@ class ScriptShell:
         args, unknown = p.parse_known_args()
         args = vars(args)
 
-        self.sweep_seq = self._generate_sweep_sequence(args['from'], args['to'], args['step'])
+        self.sweep_seq = self._generate_sweep_sequence(float(args['from']), float(args['to']), float(args['step']))
 
-        self.voltage = args['V']
+        self.voltage = float(args['V'])
         self.sample_name = self._preprocess_string_for_filename(args['S'])
         self.device_id = args['ID']
 
     def _init_device(self):
-        meter = KeysightE4980AL()
+        meter = KeysightE4980AL(self.device_id)
         meter.set_voltage(self.voltage)
 
         self.meter = meter
@@ -100,5 +100,5 @@ class ScriptShell:
         self._save_path = None
         self.experiment_date = datetime.now()
         self._parse_args()
-
+        self._init_device()
         self.logger = Logger.Logger(self)

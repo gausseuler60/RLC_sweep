@@ -34,8 +34,9 @@ class RLCSweptMeasurement:
 
     def plot_close_handler(self, unused):
         self._aborted = True
-        self.save_data()
-        self._saved = True
+        if not self._saved:
+            self.save_data()
+            self._saved = True
         self.device_cleanup()
 
     # must be implemented in a child class
@@ -50,30 +51,31 @@ class RLCSweptMeasurement:
         ax.set_xlabel(self.swept_parameter_title)
         ax.set_ylabel(self.measured_parameter_title)
         ax.grid()
-
+        
+        fig.canvas.set_window_title('RLC swept measurement')
         fig.canvas.mpl_connect('close_event', self.plot_close_handler)
         fig.show()
 
         meter = self.meter
 
-        for swept_param in self._sweep_seq:
-            if self._aborted:
-                break
-
-            self.set_swept_parameter_value(swept_param)
-            val_read = meter.measure()
-
-            self.swept_now.append(swept_param)
-            self.meas_values.append(val_read)
+        for sw, data in meter.sweep_and_fetch(self._sweep_seq):
+            
+            self.swept_now.append(sw)
+            self.meas_values.append(data)
 
             line_main.set_xdata(self.swept_now)
             line_main.set_ydata(self.meas_values)
 
             ax.relim()
             ax.autoscale_view()
-            plt.pause(0.05)
+            plt.pause(0.01)
+        
 
         if not self._saved:
             self.save_data()
             
         self.device_cleanup()
+        
+        plt.ioff()
+        plt.show()
+

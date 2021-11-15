@@ -17,6 +17,7 @@ class visa_device:
             device = rm.open_resource(addr)
         else:
             raise ValueError('Invalid device initialization, please provide GPIB num or device address.')
+        device.timeout=20000
         self.device = device
 
     def __error_message(self):

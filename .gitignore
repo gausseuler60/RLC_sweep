@@ -1,6 +1,6 @@
-
+/Data/
 *.cache
-*.cache
+*.pyc
 *.pdb
 *.ide
 Shell/.vs/Shell/v16/.suo

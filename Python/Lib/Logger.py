@@ -1,7 +1,7 @@
 class Logger:
     def __init__(self, shell):
         caption = shell.title
-        self.__filename = shell.GetSaveFileName(caption + '_params', ext='log')
+        self.__filename = shell.get_save_file_name(ext='log')
         self.__lines = []
 
         self.AddGenericEntry(f'Sample = {shell.sample_name}, voltage = {shell.voltage}')
